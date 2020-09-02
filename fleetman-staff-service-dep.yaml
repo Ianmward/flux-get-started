@@ -23,6 +23,24 @@ spec:
         ports:
         - containerPort: 8080
         resources: {}
+      - env:
+        - name: mcgw_api_gateway_user
+          value: Administrator
+        - name: mcgw_ports_http
+          value: "7070"
+        - name: mcgw_downloads_apis
+          value: nodetours
+        - name: mcgw_api_gateway_password
+          value: manage
+        - name: mcgw_api_gateway_url
+          value: http://api-gateway-service:5555
+        image: harbor.aks.au-poc.com/library/softwareag/microgateway-trial:10.5.0.2
+        imagePullPolicy: IfNotPresent
+        name: softwareag-staff-service-sidecar
+        ports:
+        - containerPort: 7070
+          protocol: TCP
+        resources: {}
 ---
 apiVersion: v1
 kind: Service
@@ -38,5 +56,5 @@ spec:
   ports:
     - name: http
       port: 8080
-      targetPort: 8080
+      targetPort: 7070
   type: NodePort
